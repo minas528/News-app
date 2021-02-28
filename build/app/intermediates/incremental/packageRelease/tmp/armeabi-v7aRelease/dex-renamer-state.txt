@@ -1,0 +1,4 @@
+#Sat Jan 30 08:50:13 EAT 2021
+base.0=/home/minas/Documents/codes/AMP/Project/Mobile/build/app/intermediates/transforms/r8/release/0/classes.dex
+renamed.0=classes.dex
+path.0=classes.dex
