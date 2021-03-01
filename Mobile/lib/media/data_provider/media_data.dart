@@ -1,25 +1,28 @@
 import 'dart:convert';
 
-import 'package:Mobile/post/model/models.dart';
+import 'package:Mobile/news/model/models.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class MediaDataProvider{
-final _baseUrl = 'http://192.168.43.42:5000';
+final _baseUrl = 'http://10.0.2.2:5000';
 final http.Client httpClient;
-final token =
-'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjAwMDQ0YWJjMzIyYzdlYTExYzA4OWJhIiwicm9sZSI6InVzZXIiLCJ1c2VybmFtZSI6Im1pbmFzNTI4MiIsImVtYWlsIjoibWluYWxlbS41M2RAZ21haWwuY29tIiwiaWF0IjoxNjEzMTUxODAxLCJleHAiOjE2MTM3NTY2MDF9.m0-1vqNPgeYCiqx5STbiIOQMGGoK4jP4am9rJRpUm5k';
 
 MediaDataProvider({@required this.httpClient}) : assert(httpClient != null);
+Future<String> getTokenFromStorage() async {
+  final storage = new FlutterSecureStorage();
+  String token = await storage.read(key: "jwt_token");
+  return token;
+}
 
 Future<Media> createMedia(Media media) async {
   final response = await httpClient.post(
     '$_baseUrl/api/media',
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': '$token'
+      'Authorization': '$getTokenFromStorage()'
     },
-
     body: jsonEncode(<String, dynamic>{
       'name': media.name,
       'email': media.email,
@@ -40,7 +43,7 @@ Future<List<Media>> getMedias() async {
   final response = await httpClient.get('$_baseUrl/api/media',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': '$token'
+        'Authorization': '$getTokenFromStorage()'
       });
 
   if (response.statusCode == 200) {
@@ -55,7 +58,7 @@ Future<Media> getMediaById(String id) async {
   final response = await httpClient.get('$_baseUrl/api/media/$id',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': '$token'
+        'Authorization': '$getTokenFromStorage()'
       });
 
   if (response.statusCode == 200) {
@@ -70,7 +73,7 @@ Future<void> deleteMedia(String id) async {
     '$_baseUrl/api/media/$id',
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': '$token'
+      'Authorization': '$getTokenFromStorage()'
     },
   );
   if (response.statusCode != 200) {
@@ -84,7 +87,7 @@ Future<void> updateMedia(Media media) async {
       '$_baseUrl/api/media/${media.id}',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': '$token'
+        'Authorization': '$getTokenFromStorage()'
       },
       body: jsonEncode(<String, dynamic>{
         'id': media.id,

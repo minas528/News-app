@@ -1,11 +1,12 @@
 import 'dart:io';
 
-import 'package:Mobile/post/screens/post_detail.dart';
-import 'package:Mobile/post/screens/post_list.dart';
-import 'package:Mobile/post/screens/post_route.dart';
+import 'package:Mobile/news/screens/post_detail.dart';
+import 'package:Mobile/news/screens/post_list.dart';
+import 'package:Mobile/news/screens/post_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Mobile/post/post.dart';
+import 'package:Mobile/news/post.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddUpdatePost extends StatefulWidget {
   static const routeName = 'postAddUpdate';
@@ -20,6 +21,16 @@ class AddUpdatePost extends StatefulWidget {
 class _AddUpdatePostState extends State<AddUpdatePost> {
   final _formKeyMedia = GlobalKey<FormState>();
   final Map<String, dynamic> _post = {};
+  File _imageFile;
+
+  _onImageButtonPressed() async {
+    File image = await ImagePicker.pickImage(
+        source: ImageSource.gallery, imageQuality: 50);
+    print(image);
+    setState(() {
+      _imageFile = image;
+    });
+  }
 
 
 
@@ -84,21 +95,7 @@ class _AddUpdatePostState extends State<AddUpdatePost> {
                   });
                 },
               ),
-              TextFormField(
-                initialValue: widget.args.edit ? widget.args.post.imgUrl : '',
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please enter image';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(labelText: 'image'),
-                onSaved: (value) {
-                  setState(() {
-                    this._post["image"] = value;
-                  });
-                },
-              ),
+
               TextFormField(
                 initialValue: widget.args.edit ? widget.args.post.reporter : '',
                 validator: (value) {
@@ -114,6 +111,12 @@ class _AddUpdatePostState extends State<AddUpdatePost> {
                   });
                 },
               ),
+              RaisedButton(onPressed: () async {
+                await _onImageButtonPressed();
+                print(_imageFile);
+                this._post["image"] = _imageFile;
+              },
+              child: Text("Choose Image"),),
               // Container(
               //   width: MediaQuery.of(context).size.width,
               //   child: FlatButton(
@@ -136,18 +139,19 @@ class _AddUpdatePostState extends State<AddUpdatePost> {
                                   id: widget.args.post.id,
                                   headLines: this._post['headlines'],
                                   content: this._post['content'],
-                                  imgUrl: this._post['image'],
-                                  media: this._post['media'],
-                                  reporter: this._post['media'],
+                                  image: this._post['image'],
+                                  imgUrl: widget.args.post.imgUrl,
+                                  media: '6026dffda23ef64e486edbb2',
+                                  reporter: '6026e2736efc8353fee595f4',
                                 ),
                               )
                             : PostCreate(
                                 Post(
                                   headLines: this._post['headlines'],
                                   content: this._post['content'],
-                                  imgUrl: this._post['image'],
-                                  media: this._post['media'],
-                                  reporter: this._post['media'],
+                                  image: this._post['image'],
+                                  media: '6026dffda23ef64e486edbb2',
+                                  reporter: '6026e2736efc8353fee595f4',
                                 ),
                               );
                         BlocProvider.of<PostBloc>(context).add(event);

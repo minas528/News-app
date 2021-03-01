@@ -17,7 +17,9 @@ class AuthBloc
     yield AuthenticationLoading();
     try {
       await Future.delayed(Duration(milliseconds: 500));
+      print('what about here');
       final currentUser = await _authenticationRepository.getCurrentUser();
+      print('currentUser'+ currentUser.toString());
       if (currentUser != null) {
         yield AuthenticationAuthenticated(user: currentUser);
       } else {
@@ -25,7 +27,7 @@ class AuthBloc
       }
     } catch (e) {
       yield AuthenticationFailure(
-          message: e.message ?? 'An unknown error occurred');
+          message: 'An unknown error occurred');
     }
   }
 

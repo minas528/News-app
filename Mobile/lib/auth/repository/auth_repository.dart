@@ -8,19 +8,15 @@ enum AuthenticationStatus { unKnown, authenticated, unauthenticated }
 
 class AuthRepository {
  final AuthDataProvider authDataProvider;
- AuthRepository({@required this.authDataProvider});
+ AuthRepository({@required this.authDataProvider}): assert (authDataProvider!= null);
 
- Future<User> logIn({
-   @required String username,
-   @required String password,
- }) async {
+ Future<User> logIn({@required String username, @required String password}) async {
+   print('got here... please tell me');
    return await authDataProvider.signInWithUsernameAndPassword(
        username, password);
  }
 
- Future<bool> register({
-   @required User user
- }) async {
+ Future<bool> register({@required User user}) async {
    return await authDataProvider.signUpWithUsernameAndPassword(user);
  }
 

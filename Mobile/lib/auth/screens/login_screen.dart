@@ -24,7 +24,7 @@ class _LoginPage extends State<LoginPage> {
   String _password = "";
   bool _isLoading;
   final _passwordController = TextEditingController();
-  final _emailController = TextEditingController();
+  final _usernaemController = TextEditingController();
   final _formKey = new GlobalKey<FormState>();
 
   @override
@@ -38,22 +38,22 @@ class _LoginPage extends State<LoginPage> {
     final height = MediaQuery.of(context).size.height;
     bool isKeyboardShowing = MediaQuery.of(context).viewInsets.vertical > 0;
 
-    void _showError(String error) {
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text(error),
-        backgroundColor: Theme.of(context).errorColor,
-      ));
-    }
+    // void _showError(String error) {
+    //   Scaffold.of(context).showSnackBar(SnackBar(
+    //     content: Text(error),
+    //     backgroundColor: Colors.red,
+    //   ));
+    // }
 
     return BlocConsumer<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state is AuthenticationFailure) {
-            _showError(state.message);
-          }
-          if (state is AuthenticationAuthenticated) {
-            Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
-          }
-        }, builder: (context, state) {
+          listener: (context, state) {
+            if (state is AuthenticationFailure) {
+              print('ooops we faild here');
+            }
+            if (state is AuthenticationAuthenticated) {
+              Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
+            }
+          }, builder: (context, state) {
       return Scaffold(
         resizeToAvoidBottomInset: false,
         body: Stack(children: [
@@ -80,7 +80,7 @@ class _LoginPage extends State<LoginPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            _buildEmailTextField(),
+                            _buildUserNameTextField(),
                             SizedBox(
                               height: 20,
                             ),
@@ -99,7 +99,7 @@ class _LoginPage extends State<LoginPage> {
           ),
         ]),
       );
-    });
+    } );
   }
 
   Widget logo(isKeyboardShowing) {
@@ -201,21 +201,21 @@ class _LoginPage extends State<LoginPage> {
     );
   }
 
-  Widget _buildEmailTextField() {
+  Widget _buildUserNameTextField() {
     return TextFormField(
-      controller: _emailController,
+      controller: _usernaemController,
       onChanged: (value) => _username = value.trim(),
-      validator: (value) => !isEmail(value)
-          ? "Sorry, we do not recognize this email address"
+      validator: (value) => value.length <= 4
+          ? "User Name must be at least 4 character"
           : null,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
-        labelText: 'Email or phone number',
+        labelText: 'Username',
         labelStyle: Theme.of(context).textTheme.bodyText1,
         floatingLabelBehavior: FloatingLabelBehavior.auto,
         // alignLabelWithHint: true,
         prefixIcon: Icon(
-          Icons.alternate_email,
+          Icons.person,
           color: Theme.of(context).iconTheme.color,
         ),
         // hintText: 'Enter your email',
@@ -271,6 +271,7 @@ class _LoginPage extends State<LoginPage> {
         if (form.validate()) {
           print("validated $_username $_password");
           form.save();
+          print(_username+"+ "+_password);
           BlocProvider.of<LoginBloc>(context).add(LoginInWithEmailButtonPressed(
               username: _username, password: _password));
         }

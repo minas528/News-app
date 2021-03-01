@@ -12,7 +12,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AuthRepository authenticationRepository;
 
   LoginBloc({this.authenticationBloc, this.authenticationRepository})
-      : super(LoginInitial());
+      :assert(authenticationRepository!=null) ,super(LoginInitial()) ;
 
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
@@ -25,20 +25,25 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       LoginInWithEmailButtonPressed event) async* {
     yield LoginLoading();
     print(" is userr data");
-
     try {
+      print('even herer'+event.username+ event.password);
+      print(authenticationRepository==null);
       final user = await authenticationRepository.logIn(
-          username: event.username, password: event.password);
+          username: event.username,
+          password: event.password);
       print("logged in user $user");
       if (user != null) {
+
         authenticationBloc.add(UserLoggedIn(user: user));
         yield LoginSuccess();
         yield LoginInitial();
       } else {
+        print('blocked errrrrrrr');
         yield LoginFailure(error: 'Something very weird just happened');
       }
     }  catch (err) {
-      yield LoginFailure(error: err.message ?? 'An unknown error occured');
+      print('err'+err.toString());
+      yield LoginFailure(error: 'An unknown error occured');
     }
   }
 }

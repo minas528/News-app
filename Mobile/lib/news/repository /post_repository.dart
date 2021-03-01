@@ -1,4 +1,4 @@
-import 'package:Mobile/post/post.dart';
+import 'package:Mobile/news/post.dart';
 import 'package:meta/meta.dart';
 
 

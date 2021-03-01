@@ -3,6 +3,7 @@ import 'package:Mobile/auth/bloc/register/register.dart';
 import 'package:Mobile/auth/bloc/register/register_state.dart';
 import 'package:Mobile/reusable/dialog.dart';
 import 'package:Mobile/users/model/User.dart';
+import 'package:Mobile/users/screens/edit_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -24,10 +25,12 @@ class _SignUpPage extends State<SignUpPage> {
   String _username = "";
   String _password = "";
   String _role = "user";
+  String _name = "";
   bool _isLoading = false;
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _nameController = TextEditingController();
   final _formKey = new GlobalKey<FormState>();
 
   bool _isCompany = false;
@@ -56,6 +59,7 @@ class _SignUpPage extends State<SignUpPage> {
             _showError("There is an error on registering");
           }
           if (state is RegisterSuccess) {
+            print('hehhhhhere');
             Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
           }
         }, builder: (context, state) {
@@ -78,28 +82,34 @@ class _SignUpPage extends State<SignUpPage> {
                         padding: EdgeInsets.symmetric(
                             horizontal: 20.0, vertical: 20.0),
                         height: height * 0.6,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            _buildUserNameTextField(),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            _buildEmailTextField(),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            _buildPasswordTextField(),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            _buildChooseAccountType(),
-                            SizedBox(
-                              height: 20.0,
-                            ),
-                            _submitButton(),
-                            _createAccountLabel(),
-                          ],
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              _buildNameTextField(),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              _buildUserNameTextField(),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              _buildEmailTextField(),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              _buildPasswordTextField(),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              _buildChooseAccountType(),
+                              SizedBox(
+                                height: 20.0,
+                              ),
+                              _submitButton(),
+                              _createAccountLabel(),
+                            ],
+                          ),
                         ),
                       ),
                     )),
@@ -120,13 +130,13 @@ class _SignUpPage extends State<SignUpPage> {
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
                 colors: [
-                  Colors.white10,
-                  Colors.white24,
+                  Colors.orange,
+                  Colors.black,
                 ])),
         width: double.infinity,
         height: isKeyboardShowing
             ? MediaQuery.of(context).size.height * 0.25
-            : MediaQuery.of(context).size.height * 0.4,
+            : MediaQuery.of(context).size.height * 0.35,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -142,7 +152,7 @@ class _SignUpPage extends State<SignUpPage> {
               height: isKeyboardShowing ? 0.0 : 30.0,
             ),
             Text(
-              'Register',
+              'SignUp',
               style: TextStyle(
                   fontSize: 30.0,
                   fontWeight: FontWeight.bold,
@@ -163,6 +173,28 @@ class _SignUpPage extends State<SignUpPage> {
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: 'Username',
+        focusColor: Color(0xff4064f3),
+        labelStyle: TextStyle(
+          color: Color(0xff4064f3),
+        ),
+        border: InputBorder.none,
+        filled: true,
+        fillColor: Color(0xfff3f3f4),
+        prefixIcon: Icon(Icons.person),
+      ),
+    );
+  }
+  Widget _buildNameTextField() {
+    return TextFormField(
+      controller: _nameController,
+      validator: (value) => value.length <= 4
+          ? "Name must be at least 4 character"
+          : null,
+      onSaved: (value) => _name = value,
+      onChanged: (value) => _name = value,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        labelText: 'Full Name',
         focusColor: Color(0xff4064f3),
         labelStyle: TextStyle(
           color: Color(0xff4064f3),
@@ -295,17 +327,21 @@ class _SignUpPage extends State<SignUpPage> {
 
   Widget _submitButton() {
     return InkWell(
+
       onTap: () {
         final form = _formKey.currentState;
         if (form.validate()) {
           form.save();
-          User user = User(username: _username, email: _email, password: _password, role: _role);
+          print(_username+"  "+_password);
+          User user = User(username: _username, email: _email, password: _password, role: _role,name: _name);
+          print(user);
           BlocProvider.of<RegisterBloc>(context).add(RegisterUser(user: user));
         }
       },
       child: Container(
         width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.symmetric(vertical: 15),
+        // height: 30,
+        padding: EdgeInsets.symmetric(vertical: 10),
         alignment: Alignment.center,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -320,7 +356,7 @@ class _SignUpPage extends State<SignUpPage> {
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
                 colors: [
-                  Colors.white24,
+                  Colors.black,
                   Colors.white10,
                 ])),
         child: _isLoading == true

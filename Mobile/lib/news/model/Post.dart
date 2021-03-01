@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +9,7 @@ class Post extends  Equatable {
   final String headLines;
   final String content;
   final String media;
+  final File image;
   final String imgUrl;
   final String reporter;
   final String createdAt;
@@ -19,10 +22,11 @@ class Post extends  Equatable {
     @required this.imgUrl,
     @required this.reporter,
     this.createdAt,
+    this.image
 });
 
   @override
-  List<Object> get props => [id, headLines, content, media, imgUrl, reporter, createdAt];
+  List<Object> get props => [id, headLines, content, media, imgUrl, reporter, createdAt, image];
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
@@ -32,7 +36,8 @@ class Post extends  Equatable {
       media: json['mediaId'],
       imgUrl: json['image'],
       reporter: json['reporterId'],
-        createdAt:json['createdAt']
+        createdAt:json['createdAt'],
+      image: null
 
     );
   }

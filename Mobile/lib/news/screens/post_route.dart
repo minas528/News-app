@@ -1,12 +1,12 @@
-import 'package:Mobile/post/screens/post_add_update.dart';
-import 'package:Mobile/post/screens/post_detail.dart';
-import 'package:Mobile/post/screens/post_list.dart';
+import 'package:Mobile/news/screens/post_add_update.dart';
+import 'package:Mobile/news/screens/post_detail.dart';
+import 'package:Mobile/news/screens/post_list.dart';
 import 'package:flutter/material.dart';
-import 'package:Mobile/post/post.dart';
+import 'package:Mobile/news/post.dart';
 
 class PostAppRoute {
   static Route generateRoute(RouteSettings settings) {
-    if(settings.name=='//'){
+    if(settings.name=='/'){
       return MaterialPageRoute(builder: (context) => PostList());
     }
     if (settings.name == AddUpdatePost.routeName) {

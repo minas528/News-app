@@ -1,7 +1,7 @@
-import 'package:Mobile/post/bloc/bloc.dart';
-import 'package:Mobile/post/model/catagories_model.dart';
-import 'package:Mobile/post/screens/post_add_update.dart';
-import 'package:Mobile/post/screens/post_route.dart';
+import 'package:Mobile/news/bloc/bloc.dart';
+import 'package:Mobile/news/model/catagories_model.dart';
+import 'package:Mobile/news/screens/post_add_update.dart';
+import 'package:Mobile/news/screens/post_route.dart';
 import 'package:Mobile/reusable/custom_cards.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

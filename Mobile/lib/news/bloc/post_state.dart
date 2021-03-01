@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:Mobile/post/post.dart';
+import 'package:Mobile/news/post.dart';
 
 class PostState extends Equatable {
   const PostState();

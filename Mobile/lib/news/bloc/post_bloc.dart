@@ -1,6 +1,5 @@
-import 'package:Mobile/post/bloc/bloc.dart';
-import 'package:Mobile/post/post.dart';
-import 'package:Mobile/post/repository/post_repository.dart';
+import 'package:Mobile/news/bloc/bloc.dart';
+import 'package:Mobile/news/post.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 class PostBloc extends Bloc<PostEvent, PostState> {
@@ -15,10 +14,12 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     if (event is PostLoad) {
       yield PostLoading();
       try {
+        print('noew');
         final posts = await postRepository.getPosts();
-
+        print('bp:${posts}' );
         yield PostLoadSuccess(posts);
       }catch(_) {
+        print('then');
         yield PostOperationFailure();
       }
     }
